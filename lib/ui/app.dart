@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_drib/ui/shots/ShotsPage.dart';
-import 'basic/FdThemeData.dart';
+import 'package:flutter_drib/ui/shots/shotsPage.dart';
+import 'basic/fdThemeData.dart';
 
 //Main app
 class MainApp extends StatelessWidget {

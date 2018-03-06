@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_drib/ui/FdDrawer.dart';
+import 'package:flutter_drib/ui/fdDrawer.dart';
 
 // Shots page. Including two tabs: 'poplar' and 'recent'
 class ShotsPage extends StatelessWidget {
