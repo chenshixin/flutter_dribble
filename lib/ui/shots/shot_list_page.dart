@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_drib/api/shots/shotsApi.dart';
 import 'package:flutter_drib/model/dribbble_shot.dart';
-import 'package:flutter_drib/ui/basic/FdColors.dart';
+import 'package:flutter_drib/ui/basic/fdColors.dart';
+import 'package:flutter_drib/ui/detail/shot_detail_page.dart';
 
 class ShotListPage extends StatefulWidget {
 
@@ -67,10 +68,10 @@ class ShotListPageState extends State<ShotListPage> {
 class GridShotItem extends StatelessWidget {
 
   final titleTextStyle = new TextStyle(
-    color: new Color(0xFF404040), fontSize: 13.0,);
+    color: FDColors.fontTitleColor, fontSize: 13.0,);
 
   final usernameTextStyle = new TextStyle(
-      fontSize: 11.0, color: new Color(0xFF404040));
+      fontSize: 11.0, color: FDColors.fontTitleColor);
 
   final DribbbleShot shot;
 
@@ -80,13 +81,32 @@ class GridShotItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return new GestureDetector(
+        onTap: () {
+          _gotoShotPage(context);
+        },
+        child: _buildGridItem()
+    );
+  }
+
+  void _gotoShotPage(BuildContext context) {
+    Navigator.push(
+        context,
+        new MaterialPageRoute(builder: (BuildContext context) {
+          return new ShotDetailPage(shot: shot);
+        }));
+  }
+
+  Card _buildGridItem() {
     return new Card(
       elevation: 0.0,
       child: new Column(
         children: <Widget>[
           new Flexible(
               fit: FlexFit.tight,
-              child: new Image.network(shot.images.normal, fit: BoxFit.cover)
+              child: new Hero(tag: shot.id,
+                  child: new Image.network(
+                      shot.images.normal, fit: BoxFit.cover))
           ),
           new Container(
               margin: const EdgeInsets.only(top: 2.0),
