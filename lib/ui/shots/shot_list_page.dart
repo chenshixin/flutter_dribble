@@ -85,10 +85,17 @@ class GridShotItem extends StatelessWidget {
       child: new Column(
         children: <Widget>[
           new Image.network(shot.images.normal, fit: BoxFit.cover),
-          new Text(shot.title, maxLines: 1,
-            textAlign: TextAlign.center,
-            style: titleTextStyle,),
-          new Text(shot.user.name, textAlign: TextAlign.center,
+          new Padding(
+              padding: new EdgeInsets.all(3.0),
+              child: new Text(shot.title, maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: titleTextStyle,)
+          ),
+          new Text(shot.user.name,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
               style: usernameTextStyle)
         ],
       ),
