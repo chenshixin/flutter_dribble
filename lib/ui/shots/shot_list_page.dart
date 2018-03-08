@@ -67,7 +67,7 @@ class ShotListPageState extends State<ShotListPage> {
 class GridShotItem extends StatelessWidget {
 
   final titleTextStyle = new TextStyle(
-    color: new Color(0xFF404040), fontSize: 14.0,);
+    color: new Color(0xFF404040), fontSize: 13.0,);
 
   final usernameTextStyle = new TextStyle(
       fontSize: 11.0, color: new Color(0xFF404040));
@@ -95,11 +95,14 @@ class GridShotItem extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: titleTextStyle,)
           ),
-          new Text(shot.user.name,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
-              style: usernameTextStyle)
+          new Container(
+              margin: const EdgeInsets.only(bottom: 4.0),
+              child: new Text(shot.user.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: usernameTextStyle)
+          )
         ],
       ),
     );
