@@ -13,4 +13,9 @@ class FDColors {
   static const Color playbook = const Color(0xFF66cc99);
   static const Color slate = const Color(0xFF9da3a5);
 
+  static const Color dividerColor = const Color(0xFFD9D9D9);
+  static const Color fontTitleColor = const Color(0xFF404040);
+  static const Color fontSubTitleColor = const Color(0xFFA1A1A1);
+  static const Color fontContentColor = const Color(0xFF606060);
+
 }
