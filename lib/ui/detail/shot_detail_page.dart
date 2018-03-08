@@ -48,18 +48,23 @@ class ShotDetailPage extends StatelessWidget {
                 child: new Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    new Text(shot.title,
-                      overflow: TextOverflow.ellipsis,
-                      style: new TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: FDColors.fontTitleColor,
-                          fontSize: 15.0),
-                      maxLines: 1,),
+                    _getBasicInfoTitle,
                     _getBasicInfoSubTitle()
                   ],)),)
         ],
       ),
     );
+  }
+
+  Widget get _getBasicInfoTitle {
+    return new Container(margin: const EdgeInsets.only(bottom: 3.0),
+        child: new Text(shot.title,
+          overflow: TextOverflow.ellipsis,
+          style: new TextStyle(
+              fontWeight: FontWeight.bold,
+              color: FDColors.fontTitleColor,
+              fontSize: 15.0),
+          maxLines: 1,));
   }
 
   RichText _getBasicInfoSubTitle() {
@@ -78,23 +83,36 @@ class ShotDetailPage extends StatelessWidget {
 
   SliverAppBar _buildSliverAppBar(double appBarHeight) {
     return new SliverAppBar(
-      expandedHeight: appBarHeight,
-      actions: <Widget>[
-        new IconButton(
-          icon: const Icon(Icons.share),
-          tooltip: 'Share',
-          onPressed: () {},
-        )
-      ],
-      flexibleSpace: new FlexibleSpaceBar(
-        background: new Hero(
-            tag: shot.id,
-            child: new Image.network(
-                shot.images.normal, fit: BoxFit.cover,
-                height: appBarHeight)
-        ),
-      ),
-    );
+        expandedHeight: appBarHeight,
+        actions: <Widget>[
+          new IconButton(
+            icon: const Icon(Icons.share),
+            tooltip: 'Share',
+            onPressed: () {},
+          )
+        ],
+        flexibleSpace: new FlexibleSpaceBar(
+          background: new Stack(
+            fit: StackFit.expand,
+            children: <Widget>[
+              new Hero(
+                  tag: shot.id,
+                  child: new Image.network(
+                      shot.images.normal, fit: BoxFit.cover,
+                      height: appBarHeight)),
+              const DecoratedBox(
+                decoration: const BoxDecoration(
+                  gradient: const LinearGradient(
+                    begin: const Alignment(0.0, -1.0),
+                    end: const Alignment(0.0, -0.4),
+                    colors: const <Color>[
+                      const Color(0x60000000), const Color(0x00000000)],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ));
   }
 
   Widget _buildCountContainer() {
