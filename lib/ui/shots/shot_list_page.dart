@@ -51,7 +51,7 @@ class ShotListPageState extends State<ShotListPage> {
     } else {
       return new GridView.count(
           crossAxisCount: 2,
-          childAspectRatio: 1.0,
+          childAspectRatio: 0.9,
           crossAxisSpacing: 12.0,
           mainAxisSpacing: 12.0,
           padding: const EdgeInsets.all(12.0),
@@ -84,9 +84,12 @@ class GridShotItem extends StatelessWidget {
       elevation: 0.0,
       child: new Column(
         children: <Widget>[
-          new Image.network(shot.images.normal, fit: BoxFit.cover),
-          new Padding(
-              padding: new EdgeInsets.all(3.0),
+          new Flexible(
+              fit: FlexFit.tight,
+              child: new Image.network(shot.images.normal, fit: BoxFit.cover)
+          ),
+          new Container(
+              margin: const EdgeInsets.only(top: 2.0),
               child: new Text(shot.title, maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
