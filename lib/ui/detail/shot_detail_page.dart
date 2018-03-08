@@ -14,33 +14,51 @@ class ShotDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final appBarHeight = 250.0;
     return new Scaffold(
+        appBar: new AppBar(title: new Text(shot.title), actions: <Widget>[
+          new IconButton(icon: new Icon(Icons.share),
+              tooltip: "Share",
+              onPressed: () {}),
+        ],),
         body: new CustomScrollView(
             slivers: <Widget>[
-              _buildSliverAppBar(appBarHeight),
+              _buildImageContainer(appBarHeight),
               new SliverList(delegate: new SliverChildListDelegate([
-                _buildBasicInfoContainer(),
-                _buildCountContainer()
+                new Container(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 18.0, horizontal: 16.0),
+                  child: new Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      _buildTitle(),
+                      _buildCountAndDateContainer(),
+                      _buildUserInfo(),
+                      _buildTagContainer(),
+                    ],
+                  ),
+                ),
               ]))
             ]
         )
     );
   }
 
-  Container _buildBasicInfoContainer() {
+  Widget _buildTitle() {
+    var titleTextStyle = new TextStyle(
+        fontWeight: FontWeight.bold,
+        color: FDColors.fontTitleColor,
+        fontSize: 13.0);
+    return new Text(shot.title,
+        style: titleTextStyle);
+  }
+
+  Container _buildUserInfo() {
     return new Container(
-      padding: const EdgeInsets.all(10.0),
-      decoration: new BoxDecoration(
-        border: new Border(
-            top: new BorderSide(
-                color: FDColors.dividerColor, width: 0.5),
-            bottom: new BorderSide(
-                color: FDColors.dividerColor, width: 0.5)),
-      ),
+      margin: const EdgeInsets.only(top: 16.0),
       child: new Row(
         children: <Widget>[
           new CircleAvatar(
             backgroundImage: new NetworkImage(shot.user.avatarUrl),
-            radius: 18.0,
+            radius: 16.0,
           ),
           new Flexible(
             child: new Container(
@@ -48,49 +66,21 @@ class ShotDetailPage extends StatelessWidget {
                 child: new Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    _getBasicInfoTitle,
-                    _getBasicInfoSubTitle()
+                    new Text(shot.user.name, style: new TextStyle(
+                        fontSize: 12.0, color: FDColors.fontTitleColor),),
+                    new Text(shot.user.location, style: new TextStyle(
+                        fontSize: 10.0, color: FDColors.fontSubTitleColor),),
                   ],)),)
         ],
       ),
     );
   }
 
-  Widget get _getBasicInfoTitle {
-    return new Container(margin: const EdgeInsets.only(bottom: 3.0),
-        child: new Text(shot.title,
-          overflow: TextOverflow.ellipsis,
-          style: new TextStyle(
-              fontWeight: FontWeight.bold,
-              color: FDColors.fontTitleColor,
-              fontSize: 15.0),
-          maxLines: 1,));
-  }
-
-  RichText _getBasicInfoSubTitle() {
-    final subTitleTextStyle = new TextStyle(
-        color: FDColors.fontSubTitleColor, fontSize: 12.0);
-    return new RichText(
-        text: new TextSpan(text: "By ",
-            style: subTitleTextStyle,
-            children: [
-              new TextSpan(text: shot.user.name,
-                  style: new TextStyle(color: FDColors.linkBlue)),
-              new TextSpan(
-                  text: " On " + "2018.03.06", style: subTitleTextStyle)
-            ]));
-  }
-
-  SliverAppBar _buildSliverAppBar(double appBarHeight) {
+  SliverAppBar _buildImageContainer(double appBarHeight) {
     return new SliverAppBar(
         expandedHeight: appBarHeight,
-        actions: <Widget>[
-          new IconButton(
-            icon: const Icon(Icons.share),
-            tooltip: 'Share',
-            onPressed: () {},
-          )
-        ],
+        //Set false to hide leading(back button)
+        automaticallyImplyLeading: false,
         flexibleSpace: new FlexibleSpaceBar(
           background: new Stack(
             fit: StackFit.expand,
@@ -100,56 +90,69 @@ class ShotDetailPage extends StatelessWidget {
                   child: new Image.network(
                       shot.images.normal, fit: BoxFit.cover,
                       height: appBarHeight)),
-              const DecoratedBox(
-                decoration: const BoxDecoration(
-                  gradient: const LinearGradient(
-                    begin: const Alignment(0.0, -1.0),
-                    end: const Alignment(0.0, -0.4),
-                    colors: const <Color>[
-                      const Color(0x60000000), const Color(0x00000000)],
-                  ),
-                ),
-              ),
             ],
           ),
         ));
   }
 
-  Widget _buildCountContainer() {
-    const fontSize = 13.0;
+  Widget _buildCountAndDateContainer() {
+    const fontSize = 11.0;
     final textStyle = const TextStyle(
-        color: FDColors.fontSubTitleColor, fontSize: fontSize);
-    final padding = const EdgeInsets.only(left: 3.0);
+        color: FDColors.fontTipColor, fontSize: fontSize);
+    //Spacing between counts
+    final spacingOuter = const EdgeInsets.only(left: 16.0);
+    //Space between icon and number
+    final spacingInner = const EdgeInsets.only(left: 4.0);
     return new Container(
-        padding: const EdgeInsets.only(
-            top: 5.0, left: 10.0, right: 10.0, bottom: 5.0),
-        decoration: new BoxDecoration(
-          border: new Border(
-              bottom: new BorderSide(
-                  color: FDColors.dividerColor, width: 0.5)),
-        ),
+        margin: const EdgeInsets.only(top: 15.0),
         child: new Row(
             children: <Widget>[
-              new Icon(Icons.visibility, size: 14.0,
-                  color: FDColors.fontSubTitleColor),
-              new Expanded(child:
+              new Text("2018.03.1", style: textStyle),
               new Padding(
-                  padding: padding, child: new Text(
-                  shot.viewsCount.toString(), style: textStyle))),
-              new Icon(
-                  Icons.chat_bubble, size: fontSize,
-                  color: FDColors.fontSubTitleColor),
-              new Expanded(child: new Padding(
-                  padding: padding, child: new Text(
-                  shot.commentsCount.toString(), style: textStyle))),
-              new Icon(
-                  Icons.favorite, size: fontSize,
-                  color: FDColors.fontSubTitleColor),
+                padding: spacingOuter,
+                child: new Icon(Icons.visibility, size: 14.0,
+                    color: FDColors.fontSubTitleColor),
+              ),
               new Padding(
-                  padding: padding, child: new Text(
+                  padding: spacingInner, child: new Text(
+                  shot.viewsCount.toString(), style: textStyle)),
+              new Padding(
+                  padding: spacingOuter,
+                  child: new Icon(
+                      Icons.chat_bubble, size: fontSize,
+                      color: FDColors.fontSubTitleColor)),
+              new Padding(
+                  padding: spacingInner, child: new Text(
+                  shot.commentsCount.toString(), style: textStyle)),
+              new Padding(
+                  padding: spacingOuter,
+                  child: new Icon(
+                      Icons.favorite, size: fontSize,
+                      color: FDColors.fontSubTitleColor)),
+              new Padding(
+                  padding: spacingInner, child: new Text(
                   shot.likesCount.toString(), style: textStyle)),
             ]
         ));
+  }
+
+  Widget _buildTagContainer() {
+    final tagTextStyle = const TextStyle(
+        color: FDColors.fontTipColor, fontSize: 12.0);
+    var tags = shot.tags.map((String tag) {
+      return new Text(tag,
+          style: tagTextStyle);
+    }).toList();
+    //Insert label
+    tags.insert(0, new Text("Tags: ", style: const TextStyle(
+        color: FDColors.fontContentColor, fontSize: 13.0),));
+    return new Container(
+      margin: const EdgeInsets.only(top: 12.0),
+      child: new Wrap(
+          spacing: 8.0,
+          runSpacing: 3.0,
+          children: tags),
+    );
   }
 
 

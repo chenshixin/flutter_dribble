@@ -17,5 +17,6 @@ class FDColors {
   static const Color fontTitleColor = const Color(0xFF404040);
   static const Color fontSubTitleColor = const Color(0xFFA1A1A1);
   static const Color fontContentColor = const Color(0xFF606060);
+  static const Color fontTipColor = const Color(0xFFA0A0A0);
 
 }

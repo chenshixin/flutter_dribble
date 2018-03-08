@@ -13,11 +13,12 @@ class DribbbleShot {
   final int bucketCount;
   final int commentsCount;
   final bool animated;
+  final List<String> tags;
 
 
   DribbbleShot(this.title, this.id, this.images, this.user, this.description,
       this.likesCount, this.viewsCount, this.bucketCount, this.commentsCount,
-      this.animated);
+      this.animated, this.tags);
 
   static DribbbleShot fromJson(Map<String, dynamic> json) {
     var title = json['title'];
@@ -30,6 +31,7 @@ class DribbbleShot {
     var bucketCount = json['bucket_count'];
     var commentsCount = json['comments_count'];
     var animated = json['animated'];
+    var tags = json['tags'];
     return new DribbbleShot(
         title,
         id,
@@ -40,7 +42,8 @@ class DribbbleShot {
         viewsCount,
         bucketCount,
         commentsCount,
-        animated);
+        animated,
+        tags);
   }
 
   @override
