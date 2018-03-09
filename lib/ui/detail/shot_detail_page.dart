@@ -1,14 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_drib/api/shots/shotsApi.dart';
+import 'package:flutter_drib/model/dribbble_comment.dart';
 import 'package:flutter_drib/model/dribbble_shot.dart';
 import 'package:flutter_drib/ui/basic/fdColors.dart';
+import 'package:flutter_drib/ui/detail/comment_item.dart';
 
-class ShotDetailPage extends StatelessWidget {
+class ShotDetailPage extends StatefulWidget {
 
   final DribbbleShot shot;
 
   ShotDetailPage({Key key, this.shot})
       : assert (shot != null),
         super(key: key);
+
+  @override
+  State<StatefulWidget> createState() {
+    return new ShotDetailPageState(shot);
+  }
+
+}
+
+class ShotDetailPageState extends State<ShotDetailPage> {
+
+  final DribbbleShot shot;
+
+  List<DribbbleComment> _comments = [];
+
+
+  ShotDetailPageState(this.shot)
+      : assert (shot != null),
+        super();
+
+  @override
+  void initState() {
+    super.initState();
+    fetchShots();
+  }
+
+  void fetchShots() {
+    new ShotsApi()
+        .getCommentByShot(shot.id)
+        .then((comments) =>
+        this.setState(() {
+          _comments = comments;
+        }));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,23 +58,46 @@ class ShotDetailPage extends StatelessWidget {
         body: new CustomScrollView(
             slivers: <Widget>[
               _buildImageContainer(appBarHeight),
-              new SliverList(delegate: new SliverChildListDelegate([
-                new Container(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 18.0, horizontal: 16.0),
-                  child: new Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      _buildTitle(),
-                      _buildCountAndDateContainer(),
-                      _buildUserInfo(),
-                      _buildTagContainer(),
-                    ],
-                  ),
-                ),
-              ]))
+              new SliverList(delegate: new SliverChildListDelegate(
+                  _getContents().toList()))
             ]
         )
+    );
+  }
+
+  List<Widget> _getContents() {
+    var result = [_getHeader()];
+    if (_comments.isEmpty) {
+      result.add(new Center(child: new CircularProgressIndicator(),));
+    } else {
+      //Divider line
+      result.add(new Container(
+        decoration: new BoxDecoration(
+          border: new Border(
+              bottom: new BorderSide(
+                  color: FDColors.dividerColor, width: 0.5)),
+        ),
+      ));
+      result.addAll(_comments.map((DribbbleComment comment) {
+        return new CommentItem(comment: comment);
+      }).toList());
+    }
+    return result;
+  }
+
+  Widget _getHeader() {
+    return new Container(
+      padding: const EdgeInsets.symmetric(
+          vertical: 18.0, horizontal: 16.0),
+      child: new Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildTitle(),
+            _buildCountAndDateContainer(),
+            _buildUserInfo(),
+            _buildTagContainer()
+          ]
+      ),
     );
   }
 
@@ -68,8 +127,10 @@ class ShotDetailPage extends StatelessWidget {
                   children: <Widget>[
                     new Text(shot.user.name, style: new TextStyle(
                         fontSize: 12.0, color: FDColors.fontTitleColor),),
-                    new Text(shot.user.location, style: new TextStyle(
-                        fontSize: 10.0, color: FDColors.fontSubTitleColor),),
+                    new Text(
+                      shot.user.location == null ? "" : shot.user.location,
+                      style: new TextStyle(
+                          fontSize: 10.0, color: FDColors.fontSubTitleColor),),
                   ],)),)
         ],
       ),
@@ -137,6 +198,9 @@ class ShotDetailPage extends StatelessWidget {
   }
 
   Widget _buildTagContainer() {
+    if (shot.tags.isEmpty) {
+      return new Text("");
+    }
     final tagTextStyle = const TextStyle(
         color: FDColors.fontTipColor, fontSize: 12.0);
     var tags = shot.tags.map((String tag) {

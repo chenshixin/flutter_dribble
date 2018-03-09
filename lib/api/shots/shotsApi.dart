@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_drib/api/basicApi.dart';
+import 'package:flutter_drib/model/dribbble_comment.dart';
 import 'package:flutter_drib/model/dribbble_shot.dart';
 
 class ShotsApi extends BasicApi {
@@ -20,5 +21,17 @@ class ShotsApi extends BasicApi {
     return shots;
   }
 
+  //Get comments in shots
+  Future<List<DribbbleComment>> getCommentByShot(num shotId) async {
+    List<DribbbleComment> comments = new List<DribbbleComment>();
+    List<Map<String, dynamic>> callResult = await request(
+        "/v1/shots/$shotId/comments", null);
+    if (callResult != null) {
+      callResult.forEach((commentString) {
+        comments.add(DribbbleComment.fromJson(commentString));
+      });
+    }
+    return comments;
+  }
 
 }
