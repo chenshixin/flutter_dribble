@@ -4,23 +4,13 @@ Unofficial dribbble client in flutter. Runs in both android and iOS.
 
 ## Features
 - [x] Popular/recent shots
-- [ ] Shot detail
+- [x] Shot detail
 - [ ] About
 - [ ] User likes
 - [ ] Login
 
 ## Screenshots
-
-### iOS
-| Popular/Recent | Drawer |
-| :-------------: | :-------------: |
-|![Popular/Recent](art/ios/popular_recent.png)|![Drawer](art/ios/drawer.png)|
-
-### Android
-| Popular/Recent | Drawer |
-| :-------------: | :-------------: |
-|![Popular/Recent](art/android/popular_recent.png)|![Drawer](art/android/drawer.png)|
-
+![Demo.gif](art/demo.gif)
 
 ## Structure
 Almost all codes are under `lib` directory.
