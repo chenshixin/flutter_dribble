@@ -26,6 +26,7 @@ class ShotDetailPageState extends State<ShotDetailPage> {
 
   List<DribbbleComment> _comments = [];
 
+  var isLoadingComments = true;
 
   ShotDetailPageState(this.shot)
       : assert (shot != null),
@@ -43,6 +44,7 @@ class ShotDetailPageState extends State<ShotDetailPage> {
         .then((comments) =>
         this.setState(() {
           _comments = comments;
+          isLoadingComments = false;
         }));
   }
 
@@ -67,9 +69,9 @@ class ShotDetailPageState extends State<ShotDetailPage> {
 
   List<Widget> _getContents() {
     var result = [_getHeader()];
-    if (_comments.isEmpty) {
+    if (isLoadingComments) {
       result.add(new Center(child: new CircularProgressIndicator(),));
-    } else {
+    } else if (_comments.isNotEmpty) {
       //Divider line
       result.add(new Container(
         decoration: new BoxDecoration(
