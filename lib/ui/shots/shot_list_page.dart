@@ -45,14 +45,15 @@ class ShotListPageState extends State<ShotListPage> {
 
   @override
   Widget build(BuildContext context) {
+    var child;
     if (_shots.isEmpty) {
-      return new Center(
+      child = new Center(
         child: new CircularProgressIndicator(),
       );
     } else {
-      return new GridView.count(
+      child = new GridView.count(
           crossAxisCount: 2,
-          childAspectRatio: 0.9,
+          childAspectRatio: 1.0,
           crossAxisSpacing: 12.0,
           mainAxisSpacing: 12.0,
           padding: const EdgeInsets.all(12.0),
@@ -61,6 +62,7 @@ class ShotListPageState extends State<ShotListPage> {
           }).toList()
       );
     }
+    return new Container(child: child, color: FDColors.bgColor);
   }
 
 }
@@ -97,34 +99,25 @@ class GridShotItem extends StatelessWidget {
         }));
   }
 
-  Card _buildGridItem() {
-    return new Card(
-      elevation: 0.0,
-      child: new Column(
-        children: <Widget>[
-          new Flexible(
-              fit: FlexFit.tight,
-              child: new Hero(tag: shot.id,
-                  child: new Image.network(
-                      shot.images.normal, fit: BoxFit.cover))
-          ),
-          new Container(
-              margin: const EdgeInsets.only(top: 2.0),
-              child: new Text(shot.title, maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-                style: titleTextStyle,)
-          ),
-          new Container(
-              margin: const EdgeInsets.only(bottom: 4.0),
-              child: new Text(shot.user.name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
-                  style: usernameTextStyle)
-          )
-        ],
-      ),
+  Widget _buildGridItem() {
+    var itemContent = <Widget>[new Hero(
+        tag: shot.id,
+        child: new Image.network(
+            shot.images.normal, fit: BoxFit.cover)),
+    ];
+    if (shot.animated) {
+      itemContent.add(new Container(
+        alignment: AlignmentDirectional.topEnd,
+        margin: const EdgeInsets.only(top: 8.0, right: 8.0),
+        child: new Image.asset("assets/images/ic_gif.png",
+            width: 24.0,
+            height: 16.0),
+      ));
+    }
+    return new Stack(
+      fit: StackFit.expand,
+      children: itemContent,
+      alignment: AlignmentDirectional.topEnd,
     );
   }
 
