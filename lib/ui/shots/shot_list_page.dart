@@ -102,8 +102,17 @@ class GridShotItem extends StatelessWidget {
   Widget _buildGridItem() {
     var itemContent = <Widget>[new Hero(
         tag: shot.id,
-        child: new Image.network(
-            shot.images.normal, fit: BoxFit.cover)),
+        child: new DecoratedBox(
+          decoration: new BoxDecoration(
+            borderRadius: new BorderRadius.circular(5.0),
+            image: new DecorationImage(
+              image: new NetworkImage(
+                  shot.images.normal),
+              fit: BoxFit.cover,
+              alignment: Alignment.center,
+            ),
+          ),
+        )),
     ];
     if (shot.animated) {
       itemContent.add(new Container(
