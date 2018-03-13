@@ -119,10 +119,12 @@ class ShotDetailPageState extends State<ShotDetailPage> {
       child: new GestureDetector(
         child: new Row(
           children: <Widget>[
-            new CircleAvatar(
-              backgroundImage: new NetworkImage(shot.user.avatarUrl),
-              radius: 16.0,
-            ),
+            new Hero(
+                tag: shot.user.id,
+                child: new CircleAvatar(
+                  backgroundImage: new NetworkImage(shot.user.avatarUrl),
+                  radius: 16.0,
+                )),
             new Flexible(
               child: new Container(
                   margin: const EdgeInsets.only(left: 8.0),
@@ -150,7 +152,8 @@ class ShotDetailPageState extends State<ShotDetailPage> {
     Navigator.push(
         context,
         new MaterialPageRoute(builder: (BuildContext context) {
-          return new UserPage(user: shot.user, bgImgUrl: this.shot.images.normal);
+          return new UserPage(
+              user: shot.user, bgImgUrl: this.shot.images.normal);
         }));
   }
 

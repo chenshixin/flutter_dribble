@@ -110,10 +110,14 @@ class UserPageState extends State<UserPage> {
                     child: new Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        new CircleAvatar(
-                            backgroundImage: new NetworkImage(user.avatarUrl),
-                            radius: 40.0
-                        ),
+                        new Hero(
+                            tag: user.id,
+                            child:
+                            new CircleAvatar(
+                                backgroundImage: new NetworkImage(
+                                    user.avatarUrl),
+                                radius: 40.0
+                            )),
                         new Container(
                             margin: new EdgeInsets.only(top: 10.0),
                             child: new Text(user.name, maxLines: 1,
