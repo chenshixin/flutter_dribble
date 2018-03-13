@@ -24,7 +24,7 @@ class DribbbleShot {
     var title = json['title'];
     var id = json['id'];
     var images = DribbbleImage.fromJson(json['images']);
-    var user = DribbbleUser.fromJson(json['user']);
+    var user = json['user'] == null ? null : DribbbleUser.fromJson(json['user']);
     var description = json['description'];
     var likesCount = json['likes_count'];
     var viewsCount = json['views_count'];

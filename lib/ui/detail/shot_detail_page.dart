@@ -4,6 +4,7 @@ import 'package:flutter_drib/model/dribbble_comment.dart';
 import 'package:flutter_drib/model/dribbble_shot.dart';
 import 'package:flutter_drib/ui/basic/fdColors.dart';
 import 'package:flutter_drib/ui/detail/comment_item.dart';
+import 'package:flutter_drib/ui/user/user_page.dart';
 
 class ShotDetailPage extends StatefulWidget {
 
@@ -61,14 +62,14 @@ class ShotDetailPageState extends State<ShotDetailPage> {
             slivers: <Widget>[
               _buildImageContainer(appBarHeight),
               new SliverList(delegate: new SliverChildListDelegate(
-                  _getContents().toList()))
+                  _getContents(context).toList()))
             ]
         )
     );
   }
 
-  List<Widget> _getContents() {
-    var result = [_getHeader()];
+  List<Widget> _getContents(BuildContext context) {
+    var result = [_getHeader(context)];
     if (isLoadingComments) {
       result.add(new Center(child: new CircularProgressIndicator(),));
     } else if (_comments.isNotEmpty) {
@@ -87,7 +88,7 @@ class ShotDetailPageState extends State<ShotDetailPage> {
     return result;
   }
 
-  Widget _getHeader() {
+  Widget _getHeader(BuildContext context) {
     return new Container(
       padding: const EdgeInsets.symmetric(
           vertical: 18.0, horizontal: 16.0),
@@ -96,7 +97,7 @@ class ShotDetailPageState extends State<ShotDetailPage> {
           children: [
             _buildTitle(),
             _buildCountAndDateContainer(),
-            _buildUserInfo(),
+            _buildUserInfo(context),
             _buildTagContainer()
           ]
       ),
@@ -112,31 +113,45 @@ class ShotDetailPageState extends State<ShotDetailPage> {
         style: titleTextStyle);
   }
 
-  Container _buildUserInfo() {
+  Container _buildUserInfo(BuildContext context) {
     return new Container(
       margin: const EdgeInsets.only(top: 16.0),
-      child: new Row(
-        children: <Widget>[
-          new CircleAvatar(
-            backgroundImage: new NetworkImage(shot.user.avatarUrl),
-            radius: 16.0,
-          ),
-          new Flexible(
-            child: new Container(
-                margin: const EdgeInsets.only(left: 8.0),
-                child: new Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    new Text(shot.user.name, style: new TextStyle(
-                        fontSize: 12.0, color: FDColors.fontTitleColor),),
-                    new Text(
-                      shot.user.location == null ? "" : shot.user.location,
-                      style: new TextStyle(
-                          fontSize: 10.0, color: FDColors.fontSubTitleColor),),
-                  ],)),)
-        ],
+      child: new GestureDetector(
+        child: new Row(
+          children: <Widget>[
+            new CircleAvatar(
+              backgroundImage: new NetworkImage(shot.user.avatarUrl),
+              radius: 16.0,
+            ),
+            new Flexible(
+              child: new Container(
+                  margin: const EdgeInsets.only(left: 8.0),
+                  child: new Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      new Text(shot.user.name, style: new TextStyle(
+                          fontSize: 12.0, color: FDColors.fontTitleColor),),
+                      new Text(
+                        shot.user.location == null ? "" : shot.user.location,
+                        style: new TextStyle(
+                            fontSize: 10.0,
+                            color: FDColors.fontSubTitleColor),),
+                    ],)),)
+          ],
+        ),
+        onTap: () {
+          _gotoUserPage(context);
+        },
       ),
     );
+  }
+
+  void _gotoUserPage(BuildContext context) {
+    Navigator.push(
+        context,
+        new MaterialPageRoute(builder: (BuildContext context) {
+          return new UserPage(user: shot.user, bgImgUrl: this.shot.images.normal);
+        }));
   }
 
   SliverAppBar _buildImageContainer(double appBarHeight) {
